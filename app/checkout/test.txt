@@ -1,0 +1,126 @@
+    {/* Payment Method Section */}
+        <div className="bg-white shadow-xl rounded-xl p-6 mb-16">
+          <h2 className="text-2xl font-medium text-gray-800 mb-6">Payment Method</h2>
+          <div className="space-y-4">
+            <div>
+              <label className="inline-flex items-center text-sm font-medium text-gray-600">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="CreditCard"
+                  checked={paymentMethod === 'CreditCard'}
+                  onChange={() => {
+                    setPaymentMethod('CreditCard');
+                    setShowCODMessage(false);
+                  }}
+                  className="custom-radio" // Custom radio class
+                />
+                <span className="ml-2">Credit Card</span>
+              </label>
+            </div>
+            <div>
+              <label className="inline-flex items-center text-sm font-medium text-gray-600">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="PayPal"
+                  checked={paymentMethod === 'PayPal'}
+                  onChange={() => {
+                    setPaymentMethod('PayPal');
+                    setShowCODMessage(false);
+                  }}
+                  className="custom-radio" // Custom radio class
+                />
+                <span className="ml-2">PayPal</span>
+              </label>
+            </div>
+            <div>
+              <label className="inline-flex items-center text-sm font-medium text-gray-600">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="COD"
+                  checked={paymentMethod === 'COD'}
+                  onChange={() => {
+                    setPaymentMethod('COD');
+                    setShowCODMessage(true); // Show COD fee message
+                  }}
+                  className="custom-radio" // Custom radio class
+                />
+                <span className="ml-2">Cash on Delivery (COD)</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Show COD Handling Fee Message */}
+          {showCODMessage && (
+            <div className="mt-4 text-sm text-gray-600">
+              <p><strong>Note:</strong> There is an additional handling fee for Cash on Delivery (COD).</p>
+            </div>
+          )}
+
+          {/* Show credit card or PayPal details based on selection */}
+          {paymentMethod === 'CreditCard' && (
+            <div className="mt-4">
+              <h3 className="text-lg font-medium text-gray-800">Credit Card Details</h3>
+              <input
+                type="text"
+                placeholder="Card Number"
+                className="mt-2 block w-full px-4 py-2 border rounded-md"
+                value={creditCardDetails.cardNumber}
+                onChange={(e) =>
+                  setCreditCardDetails({ ...creditCardDetails, cardNumber: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Expiry Date"
+                className="mt-2 block w-full px-4 py-2 border rounded-md"
+                value={creditCardDetails.expiryDate}
+                onChange={(e) =>
+                  setCreditCardDetails({ ...creditCardDetails, expiryDate: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="CVV"
+                className="mt-2 block w-full px-4 py-2 border rounded-md"
+                value={creditCardDetails.cvv}
+                onChange={(e) =>
+                  setCreditCardDetails({ ...creditCardDetails, cvv: e.target.value })
+                }
+              />
+            </div>
+          )}
+
+          {paymentMethod === 'PayPal' && (
+            <div className="mt-4">
+              <h3 className="text-lg font-medium text-gray-800">PayPal Email</h3>
+              <input
+                type="email"
+                placeholder="Your PayPal Email"
+                className="mt-2 block w-full px-4 py-2 border rounded-md"
+                value={paypalDetails.email}
+                onChange={(e) =>
+                  setPaypalDetails({ ...paypalDetails, email: e.target.value })
+                }
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Place Order Button */}
+        <div className="flex justify-between items-center">
+          <button
+            onClick={() => router.push('/cart')}
+            className="flex px-[8.2vmin] py-3 bg-black text-white rounded-full font-[poppins] hover:bg-gray-700"
+          >
+            <ArrowLeft className="h-5 w-5 mr-2" /> Back to Cart
+          </button>
+          <button
+            onClick={handlePlaceOrder}
+            className="px-[10vmin] py-3 bg-black text-white rounded-full font-[poppins] hover:bg-green-700"
+          >
+            Place Order
+          </button>
+        </div>

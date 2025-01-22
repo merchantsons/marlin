@@ -1,0 +1,46 @@
+Modules Used 
+1. Lucide React
+------------------
+npm i lucide-react
+
+
+
+2. Styked-Components
+--------------------
+npm i styled-components
+
+3
+npm install clsx
+
+4
+npm install tailwind-merge
+
+5
+npm install class-variance-authority
+
+6
+npm install @radix-ui/react-accordion @radix-ui/react-slider @radix-ui/react-tabs @radix-ui/react-dropdown-menu
+
+7
+npm install embla-carousel-react
+
+8.
+npm install @radix-ui/react-dropdown-menu@latest
+
+9.
+npm install @headlessui/react
+
+10.
+npm install swiper
+
+11.
+npm install @portabletext/react
+
+12.
+npm install react-icons
+
+13.
+npm install react-icons js-cookie
+npm install --save-dev @types/js-cookie
+
+
