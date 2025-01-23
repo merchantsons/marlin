@@ -20,8 +20,7 @@ interface ProductSanity {
   price: number
   originalPrice?: number
   rate: number
-  reviews: number // Use reviews for sorting
-  sales: number // Keep this in case you want to use it later
+  reviews: number
   image1: {
     asset: {
       _id: string
@@ -37,23 +36,20 @@ interface Product {
   price: number
   originalPrice?: number
   rate: number
-  reviews: number // Include reviews in the Product interface
-  sales: number
+  reviews: number
   image1Url: string
   discount?: string
   discPrice?: string
 }
 
-async function fetchTopSellingProducts(): Promise<Product[]> {
-  // Adjust query to fetch top-rated products, sorted by reviews in descending order
-  const query = `*[_type == "shopco"] | order(reviews desc) { // Fetch top 10 products based on reviews
+async function fetchTopReviewedProducts(): Promise<Product[]> {
+  const query = `*[_type == "shopco"] | order(reviews desc) {  // Fetch products ordered by reviews
     id,
     title,
     price,
     discPrice,
     rate,
-    reviews,
-    sales,
+    reviews, 
     image1 {
       asset -> {
         _id,
@@ -88,7 +84,7 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
-export default function TopSelling() {
+export default function TopReviewed() {
   const [products, setProducts] = useState<Product[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [slidesPerView] = useState(4) // Show 4 products at a time
@@ -96,14 +92,13 @@ export default function TopSelling() {
 
   useEffect(() => {
     const fetch = async () => {
-      const products = await fetchTopSellingProducts()
+      const products = await fetchTopReviewedProducts()
       setProducts(products)
     }
 
     fetch()
   }, [])
 
-  // Define `nextSlide` using useCallback to avoid re-creating it on every render
   const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       if (prevIndex + slidesPerView >= products.length) {
@@ -113,7 +108,6 @@ export default function TopSelling() {
     })
   }, [products.length, slidesPerView])
 
-  // Auto-scrolling functionality (starts immediately, but pauses on hover)
   useEffect(() => {
     if (isHovered) return // Pause if hovering
 
@@ -121,11 +115,9 @@ export default function TopSelling() {
       nextSlide() // Trigger next slide every 3 seconds
     }, 3000)
 
-    // Cleanup interval on component unmount
     return () => clearInterval(intervalId)
-  }, [currentIndex, isHovered, nextSlide]) // Include nextSlide in the dependencies array
+  }, [currentIndex, isHovered, nextSlide])
 
-  // Function to go to the previous slide
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => {
       if (prevIndex === 0) {
@@ -141,12 +133,25 @@ export default function TopSelling() {
       onMouseEnter={() => setIsHovered(true)} // Pause on hover
       onMouseLeave={() => setIsHovered(false)} // Resume auto-scroll after hover
     >
-      <h2 className={`${integralCF.className} mb-8 text-center text-3xl font-bold tracking-tight`}>
-        TOP  SELLING  PRODUCTS
-      </h2>
+      <h2 className={`${integralCF.className} mb-5 text-center text-4xl font-bold tracking-tight`}>TOP SELLING</h2>
 
       {/* Product Slider */}
-      <div className="relative overflow-hidden mb-6">
+      <div className="relative overflow-hidden ">
+        {/* Navigation Top Positioned in Bottom Right Corner */}
+        <div className="flex flex-row gap-1 justify-end mb-3">
+          <button
+            onClick={prevSlide}
+            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-black hover:text-white hover:bg-black shadow-md"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-black hover:text-white hover:bg-black shadow-md"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
         <div
           className="flex transition-transform duration-300 ease-in-out"
           style={{
@@ -193,31 +198,13 @@ export default function TopSelling() {
             </div>
           ))}
         </div>
-         {/* Navigation Buttons Positioned in Bottom Right Corner */}
-         <div className="flex flex-row gap-1 justify-end mt-10">
-          <button
-            onClick={prevSlide}
-            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-100 shadow-md"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-100 shadow-md"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>        
       </div>
 
       {/* View All Link */}
-      <div className="-mt-14 text-center">
-        <Link
-          href="/onsale"
-          className="inline-block rounded-full border border-blue-950 bg-blue-950 px-8 py-2 text-sm font-medium text-white transition-colors hover:text-black hover:bg-gray-50"
-        >
+      <div className='text-center mt-[8vmin]'>
+        <Link href="/topreviewed" className="cursor-pointer rounded-full border border-black bg-gray-100 px-[25vmin] py-[1vmin] text-sm font-medium hover:text-white hover:bg-black">
           View All
-        </Link>       
+        </Link>
       </div>
     </section>
   )

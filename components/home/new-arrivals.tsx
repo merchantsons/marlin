@@ -137,12 +137,25 @@ export default function NewArrivals() {
       onMouseEnter={() => setIsHovered(true)} // Pause on hover
       onMouseLeave={() => setIsHovered(false)} // Resume auto-scroll after hover
     >
-      <h2 className={`${integralCF.className} mb-8 text-center text-3xl font-bold tracking-tight`}>
-        NEW ARRIVALS
-      </h2>
+      <h2 className={`${integralCF.className} mb-5 text-center text-4xl font-bold tracking-tight`}>NEW ARRIVALS</h2>
 
       {/* Product Slider */}
-      <div className="relative overflow-hidden mb-6">
+      <div className="relative overflow-hidden ">
+        {/* Navigation Top Positioned in Bottom Right Corner */}
+        <div className="flex flex-row gap-1 justify-end mb-3">
+          <button
+            onClick={prevSlide}
+            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-black hover:text-white hover:bg-black shadow-md"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white text-black hover:text-white hover:bg-black shadow-md"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
         <div
           className="flex transition-transform duration-300 ease-in-out"
           style={{
@@ -189,34 +202,14 @@ export default function NewArrivals() {
             </div>
           ))}
         </div>
-         {/* Navigation Buttons Positioned in Bottom Right Corner */}
-         <div className="flex flex-row gap-1 justify-end mt-10">
-          <button
-            onClick={prevSlide}
-            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-100 shadow-md"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="w-8 h-8 flex items-center justify-center border border-gray-300 bg-white hover:bg-gray-100 shadow-md"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-        </div>        
       </div>
 
       {/* View All Link */}
-      <div className="-mt-14 text-center">
-        <Link
-          href="/newarrivals"
-          className="inline-block rounded-full border border-blue-950 bg-blue-950 px-8 py-2 text-sm font-medium text-white transition-colors hover:text-black hover:bg-gray-50"
-        >
+      <div className='text-center mt-[8vmin]'>
+        <Link href="/newarrivals" className="cursor-pointer rounded-full border border-black bg-gray-100 px-[25vmin] py-[1vmin] text-sm font-medium hover:text-white hover:bg-black">
           View All
-        </Link>       
+        </Link>
       </div>
-
-      
     </section>
   )
 }
