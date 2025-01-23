@@ -1,11 +1,11 @@
 import { createClient } from '@sanity/client';
 
 const client = createClient({
-  projectId: 'wx69pq68',
-  dataset: 'production',
+  projectId: '',
+  dataset: '',
   useCdn: true,
-  apiVersion: '2025-01-13',
-  token: 'skzsEMPh1z12A13WV0RNRa5OQdCs4cdQEOcGppRmyVsjpog65BLxRRWCHUn1pDHHjWHY9zmfUgAZCi61rogsAGj8WokZLKCMlAJ4FZnkHvDCYs4A0LxBoTshQYPDugG5xWEQrovywI2LyGScIP5Q6TQ9bnZUycK62kKBe7bJ5FrrKF0fXNgJ',
+  apiVersion: '',
+  token: '',
 });
 
 // Function to generate random reviews (like "258", "899", etc.)
