@@ -202,7 +202,7 @@ export default function TopReviewed() {
 
       {/* View All Link */}
       <div className='text-center mt-[8vmin]'>
-        <Link href="/topreviewed" className="cursor-pointer rounded-full border border-black bg-gray-100 px-[25vmin] py-[1vmin] text-sm font-medium hover:text-white hover:bg-black">
+        <Link href="/onsale" className="cursor-pointer rounded-full border border-black bg-gray-100 px-[25vmin] py-[1vmin] text-sm font-medium hover:text-white hover:bg-black">
           View All
         </Link>
       </div>
