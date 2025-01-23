@@ -2,11 +2,11 @@ import { createClient } from '@sanity/client';
 
 // Initialize Sanity client using createClient
 const client = createClient({
-  projectId: 'kbozbv29',  // Replace with your Sanity project ID
-  dataset: 'production',         // Replace with your dataset name
-  token: 'skGVQ5CfyRhDOPPsQgotYcsSRfEKd2Fql5MPsFQgmR2xTvmSY9NVU3bA8jkWPKh6PwfbcBR5KIyeQIzD4UFxn15rcyKfPBJ2I22RznSOSCJq4CcKvSFfVOHgHbb2p3d4HZE8mhg0ku1iQC4nmVQa0DEIFCYeZqySkwcFIxk2cNAtdVYFPYgf',      // Replace with your Sanity token if authentication is required
+  projectId: '',  // Replace with your Sanity project ID
+  dataset: '',         // Replace with your dataset name
+  token: '',      // Replace with your Sanity token if authentication is required
   useCdn: false,                 // Use false to ensure you get the latest data, true for better performance
-  apiVersion: '2021-08-31',
+  apiVersion: '',
 });
 
 async function deleteAllProducts() {
