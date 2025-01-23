@@ -319,7 +319,7 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
                     categories.map((category) => (
                       <Link
                         key={category.id}
-                        href={`/categories/${category.category.toLowerCase()}`}
+                        href={`/categories/${category.id.toLowerCase()}`}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                         onClick={() => setIsMenuOpen(false)}
                       >
