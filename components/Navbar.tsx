@@ -7,7 +7,6 @@ import { integralCF } from '@/app/ui/fonts';
 import { cn } from '@/lib/utils';
 import Topticker from './Topticker';
 import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'; // Import Image from next/image
 
@@ -21,6 +20,12 @@ interface Product {
   image1?: string; // You can adjust the type for image based on your data structure
 }
 
+// Define the Category type
+interface Category {
+  id: string;
+  category: string;
+}
+
 type NavbarProps = {
   wishlistCount: number;
   cartCount: number;
@@ -32,9 +37,23 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
   const [searchQuery, setSearchQuery] = useState('');
   const [username, setUsername] = useState<string | null>(null);
   const [isBrandsDropdownOpen, setIsBrandsDropdownOpen] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]); // Store categories fetched from Sanity
   const [searchResults, setSearchResults] = useState<Product[]>([]); // Use the Product type here
   const router = useRouter();
-  
+
+  // Fetch categories from Sanity on initial load
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const fetchedCategories = await client.fetch('*[_type == "category"]');
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
   // Sync cart state with localStorage and listen for changes
   useEffect(() => {
     const updateCartItems = () => {
@@ -160,14 +179,19 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
                 </button>
                 {isBrandsDropdownOpen && (
                   <div className="absolute bg-white shadow-md rounded-md mt-2 w-48 z-50">
-                    {/* Add links for categories here */}
-                    <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">
-                      Shirt Full Sleeves
-                    </Link>
-                    <Link href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200">
-                      Shirt Half Sleeves
-                    </Link>
-                    {/* More categories */}
+                    {categories.length > 0 ? (
+                      categories.map((category) => (
+                        <Link
+                          key={category.id}
+                          href={`/categories/${category.id.toLowerCase()}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                        >
+                          {category.category}
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="px-4 py-2 text-sm text-gray-500">Loading categories...</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -196,7 +220,7 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
                         <div className="flex items-center">
                           {product.image1 && (
                             <Image
-                              src={urlFor(product.image1).width(50).height(50).url()}
+                              src={product.image1}
                               alt={product.title}
                               width={50}
                               height={50}
@@ -282,9 +306,32 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
             <Link href="/newarrivals" className="block text-lg hover:bg-gray-600 px-2 py-1" onClick={() => setIsMenuOpen(false)}>
               New Arrivals
             </Link>
-            <Link href="/brands" className="block text-lg hover:bg-gray-600 px-2 py-1" onClick={() => setIsMenuOpen(false)}>
-              Categories
-            </Link>
+            <div className="relative">
+              <button
+                onClick={() => setIsBrandsDropdownOpen(!isBrandsDropdownOpen)}
+                className="block text-lg hover:bg-gray-600 px-2 py-1"
+              >
+                Categories
+              </button>
+              {isBrandsDropdownOpen && (
+                <div className="absolute bg-white shadow-md rounded-md mt-2 w-48 z-50">
+                  {categories.length > 0 ? (
+                    categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={`/categories/${category.category.toLowerCase()}`}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {category.category}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="px-4 py-2 text-sm text-gray-500">Loading categories...</p>
+                  )}
+                </div>
+              )}
+            </div>
           </nav>
 
           <div className="mt-8">
@@ -309,7 +356,7 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
                       <div className="flex items-center">
                         {product.image1 && (
                           <Image
-                            src={urlFor(product.image1).width(50).height(50).url()}
+                            src={product.image1}
                             alt={product.title}
                             width={50}
                             height={50}
@@ -321,8 +368,8 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
                           <div className='flex flex-row gap-2'>
                             <p className="text-[1.2vmin] text-gray-500">{product.type}</p>
                             <p className="text-[1.2vmin] text-gray-500">{product.gender}</p>
-                            <p className="text-[1.2vmin] text-gray-500">{product.price}</p>
                           </div>
+                          <p className="text-xs text-gray-500">{product.price}</p>
                         </div>
                       </div>
                     </Link>
@@ -332,31 +379,8 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
             </div>
           </div>
         </div>
-
-        {/* Bottom Icons with Border */}
-        <div className="absolute bottom-0 w-full bg-black text-white py-4 border-t border-gray-700 flex justify-around items-center">
-          <Link href="/wishlist" className="relative" aria-label="Go to wishlist">
-            <Heart className="h-6 w-6" />
-            {wishlistCount > 0 && (
-              <span className="absolute top-0 right-0 rounded-full bg-red-600 text-white text-xs px-1.5 py-0.5">
-                {wishlistCount}
-              </span>
-            )}
-          </Link>
-
-          <Link href="/cart" className="relative" aria-label="Go to cart">
-            <ShoppingCart className="h-6 w-6" />
-            {cartCount > 0 && (
-              <span className="absolute top-0 right-0 rounded-full bg-red-600 text-white text-xs px-1.5 py-0.5">
-                {cartCount}
-              </span>
-            )}
-          </Link>
-          <Link href="/login" aria-label="User Profile">
-            <User className="h-6 w-6" />
-          </Link>
-        </div>
       </div>
     </div>
   );
 }
+
