@@ -9,6 +9,7 @@ const Carousol = () => {
     '/banners/3.jpg',
     '/banners/4.jpg',
     '/banners/5.jpg',
+    '/banners/6.jpg',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
