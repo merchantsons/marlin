@@ -126,19 +126,19 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
 
       {/* Main Navbar */}
       <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto p-0">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2"
+              className="lg:hidden gap-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
-              <Menu className="h-7 w-7" />
+              <Menu className="h-9 w-9 mt-[.8vmin]" />
             </button>
 
             {/* Logo */}
-            <div className="flex-1 left-4">
+            <div className="flex-1 left-6 ml-1">
               <Link href="/" className={cn('text-3xl lg:text-3xl font-bold', integralCF.className)}>
                 MARLIN
               </Link>
@@ -255,7 +255,7 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
       {/* Mobile Menu with Slide-in/Slide-out Effect */}
       <div
         className={cn(
-          'fixed top-0 left-0 w-[50vmin] h-full bg-black text-white z-50 transition-all duration-300 ease-out',
+          'fixed top-0 left-0 w-[50vmin] h-full bg-black text-white z-50 transition-all duration-1000 ease-out',
           isMenuOpen ? 'left-0' : '-left-full' // Control the left position for the slide-in effect
         )}
       >
@@ -283,7 +283,7 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
               New Arrivals
             </Link>
             <Link href="/brands" className="block text-lg hover:bg-gray-600 px-2 py-1" onClick={() => setIsMenuOpen(false)}>
-              Brands
+              Categories
             </Link>
           </nav>
 
