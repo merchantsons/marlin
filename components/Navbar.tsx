@@ -9,6 +9,7 @@ import Topticker from './Topticker';
 import { client } from '@/sanity/lib/client';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'; // Import Image from next/image
+import { urlFor } from '@/sanity/lib/image'; // Import urlFor to get image URL from Sanity
 
 // Define the Product type
 interface Product {
@@ -17,7 +18,7 @@ interface Product {
   gender: string;
   price: string;
   type: string;
-  image1?: string; // You can adjust the type for image based on your data structure
+  image1?: any; // You can adjust this if your image structure differs
 }
 
 // Define the Category type
@@ -211,31 +212,34 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 {searchQuery.length > 0 && searchResults.length > 0 && (
                   <div className="absolute bg-white shadow-md rounded-md mt-2 w-full z-50 max-h-60 overflow-auto">
-                    {searchResults.map((product) => (
-                      <Link
-                        key={product.id}
-                        href={`/product/${product.id}`}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                      >
-                        <div className="flex items-center">
-                          {product.image1 && (
-                            <Image
-                              src={product.image1}
-                              alt={product.title}
-                              width={50}
-                              height={50}
-                              className="h-10 w-10 object-cover rounded-md mr-4"
-                            />
-                          )}
-                          <div>
-                            <p className="text-xs font-medium">{product.title}</p>
-                            <p className="text-xs text-gray-500">{product.type}</p>
-                            <p className="text-xs text-gray-500">{product.gender}</p>
-                            <p className="text-xs text-gray-500">{product.price}</p>
+                    {searchResults.map((product) => {
+                      const imageUrl = product.image1 ? urlFor(product.image1).url() : null;
+                      return (
+                        <Link
+                          key={product.id}
+                          href={`/product/${product.id}`}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                        >
+                          <div className="flex items-center">
+                            {imageUrl && (
+                              <Image
+                                src={imageUrl}
+                                alt={product.title}
+                                width={50}
+                                height={50}
+                                className="h-10 w-10 object-cover rounded-md mr-4"
+                              />
+                            )}
+                            <div>
+                              <p className="text-xs font-medium">{product.title}</p>
+                              <p className="text-xs text-gray-500">{product.type}</p>
+                              <p className="text-xs text-gray-500">{product.gender}</p>
+                              <p className="text-xs text-gray-500">{product.price}</p>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -347,33 +351,36 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               {searchQuery.length > 0 && searchResults.length > 0 && (
                 <div className="absolute bg-white shadow-md rounded-md mt-2 w-full z-50 max-h-60 overflow-auto">
-                  {searchResults.map((product) => (
-                    <Link
-                      key={product.id}
-                      href={`/product/${product.id}`}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                    >
-                      <div className="flex items-center">
-                        {product.image1 && (
-                          <Image
-                            src={product.image1}
-                            alt={product.title}
-                            width={50}
-                            height={50}
-                            className="h-10 w-10 object-cover rounded-md mr-4"
-                          />
-                        )}
-                        <div>
-                          <p className="text-[1.2vmin] font-bold">{product.title}</p>
-                          <div className='flex flex-row gap-2'>
-                            <p className="text-[1.2vmin] text-gray-500">{product.type}</p>
-                            <p className="text-[1.2vmin] text-gray-500">{product.gender}</p>
+                  {searchResults.map((product) => {
+                    const imageUrl = product.image1 ? urlFor(product.image1).url() : null;
+                    return (
+                      <Link
+                        key={product.id}
+                        href={`/product/${product.id}`}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
+                      >
+                        <div className="flex items-center">
+                          {imageUrl && (
+                            <Image
+                              src={imageUrl}
+                              alt={product.title}
+                              width={50}
+                              height={50}
+                              className="h-10 w-10 object-cover rounded-md mr-4"
+                            />
+                          )}
+                          <div>
+                            <p className="text-[1.2vmin] font-bold">{product.title}</p>
+                            <div className='flex flex-row gap-2'>
+                              <p className="text-[1.2vmin] text-gray-500">{product.type}</p>
+                              <p className="text-[1.2vmin] text-gray-500">{product.gender}</p>
+                            </div>
+                            <p className="text-xs text-gray-500">{product.price}</p>
                           </div>
-                          <p className="text-xs text-gray-500">{product.price}</p>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -383,4 +390,3 @@ export function Navbar({ wishlistCount, cartCount, username: propUsername }: Nav
     </div>
   );
 }
-
