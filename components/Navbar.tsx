@@ -18,7 +18,7 @@ interface Product {
   gender: string;
   price: string;
   type: string;
-  image1?: any; // You can adjust this if your image structure differs
+  image1?: string; // You can adjust this if your image structure differs
 }
 
 // Define the Category type
